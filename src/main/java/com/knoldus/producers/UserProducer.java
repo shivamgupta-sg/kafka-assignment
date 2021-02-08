@@ -17,16 +17,16 @@ public class UserProducer {
         KafkaProducer<String, User> kafkaProducer = new KafkaProducer<>(properties);
 
         try {
-            for (int counter = 1; counter < 10; counter++) {
+            for (int counter = 1; counter <= 10; counter++) {
                 User user = new User(counter, "Shivam", (int) (20 + (Math.random() * 40)), "BTech");
 
+                kafkaProducer.send(
+                        new ProducerRecord(
+                                "user",
+                                String.valueOf(user.getId()),
+                                user));
+
                 System.out.println(user);
-                System.out.println(
-                        kafkaProducer.send(
-                                new ProducerRecord(
-                                        "user",
-                                        String.valueOf(user.getId()),
-                                        "User object: " + user)));
             }
         } catch (Exception e) {
             e.printStackTrace();
