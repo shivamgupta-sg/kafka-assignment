@@ -7,10 +7,10 @@ import org.apache.kafka.common.serialization.Deserializer;
 public class UserDeserializer implements Deserializer<User> {
     @Override
     public User deserialize(String s, byte[] bytes) {
-        ObjectMapper mapper = new ObjectMapper();
+        ObjectMapper objectMapper = new ObjectMapper();
         User user = null;
         try {
-            user = mapper.readValue(bytes, User.class);
+            user = objectMapper.readValue(bytes, User.class);
         } catch (Exception e) {
             e.printStackTrace();
         }

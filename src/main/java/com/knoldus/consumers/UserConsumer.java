@@ -6,6 +6,8 @@ import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +29,8 @@ public class UserConsumer {
             ObjectMapper objectMapper = new ObjectMapper();
 
             while (true) {
+                FileWriter fileWriter = new FileWriter("consumed-data.txt", true);
+
                 ConsumerRecords<String, User> consumerRecords = kafkaConsumer.poll(Duration.ofMinutes(1));
 
                 for (ConsumerRecord<String, User> consumerRecord : consumerRecords) {
@@ -35,7 +39,11 @@ public class UserConsumer {
                             consumerRecord.topic(),
                             consumerRecord.partition(),
                             consumerRecord.value().toString());
+
+                    fileWriter.write(consumerRecord.value().toString() + "\n");
                 }
+                fileWriter.flush();
+                fileWriter.close();
             }
         } catch (Exception e) {
             e.printStackTrace();
